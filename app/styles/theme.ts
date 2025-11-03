@@ -21,6 +21,7 @@ export const lightTheme: DefaultTheme = {
     cardBg: "rgba(0, 0, 0, 0.05)",
     shadow: "rgba(0,0,0,0.6)",
     conversationBg: "#e2e0e0",
+    slickArrowBgColor: "#000",
   },
 };
 
@@ -34,5 +35,6 @@ export const darkTheme: DefaultTheme = {
     cardBg: "rgba(255, 255, 255, 0.05)",
     shadow: "rgba(255,255,255,0.2)",
     conversationBg: "#3a3a3a",
+    slickArrowBgColor: "#fff",
   },
 };

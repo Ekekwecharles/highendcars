@@ -24,7 +24,7 @@ export default function ChatSupport() {
   return (
     <>
       <ChatButton onClick={handleClick} />
-      {open && <ChatWindow userId={user.id} onClose={() => setOpen(false)} />}
+      {open && user && <ChatWindow userId={user.id} onClose={() => setOpen(false)} />}
     </>
   );
 }

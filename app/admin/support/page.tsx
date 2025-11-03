@@ -162,7 +162,9 @@ export default function AdminSupport() {
       )
       .subscribe();
 
-    return () => supabase.removeChannel(convChannel);
+    return () => {
+      supabase.removeChannel(convChannel);
+    }
   }, []);
 
   // Load messages for selected conversation
@@ -195,7 +197,9 @@ export default function AdminSupport() {
       )
       .subscribe();
 
-    return () => supabase.removeChannel(channel);
+    return () => {
+      supabase.removeChannel(channel);
+    }
   }, [selectedConv]);
 
   const selectConversation = (conv: Conversation) => {

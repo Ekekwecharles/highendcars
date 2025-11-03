@@ -111,22 +111,20 @@ const StyledSlider = styled(Slider)`
     }
 
     &:hover {
-      background: ${({ theme }) => theme.colors.primary};
       &::before {
-        color: #fff;
+        color: ${({ theme }) => theme.colors.slickArrowBgColor};
       }
     }
   }
 
   .slick-dots li button:before {
     color: ${({ theme }) => theme.colors.accent};
-    opacity: 0.5;
+    opacity: 0.4;
     font-size: 10px;
     transition: 0.3s ease;
   }
 
   .slick-dots li.slick-active button:before {
-    color: ${({ theme }) => theme.colors.primary};
     opacity: 1;
   }
 

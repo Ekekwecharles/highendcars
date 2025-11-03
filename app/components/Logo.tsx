@@ -17,7 +17,7 @@ const LogoWrapper = styled.div`
   }
 `;
 
-export const Logo = ({ size = 200 }: { size?: number }) => (
+export const Logo = () => (
   <svg
     // width={size}
     // height={(size * 100) / 300} // keep proportions (curve area only ~100 tall)

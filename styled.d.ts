@@ -12,6 +12,8 @@ declare module "styled-components" {
       cardBg: string;
       shadow: string;
       conversationBg?: string;
+      slickArrowBgColor: string;
     };
+
   }
 }
