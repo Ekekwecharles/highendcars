@@ -36,6 +36,8 @@ const SliderContainer = styled.div`
   padding-bottom: 1rem;
   padding-top: 0.5rem;
   scroll-snap-type: x mandatory;
+  width: 100%;
+  -webkit-overflow-scrolling: touch; /*✅ Smooth scrolling fix for iOS */
 
   &::-webkit-scrollbar {
     height: 6px;
@@ -52,8 +54,10 @@ const CarCard = styled.div`
   border-radius: 1rem;
   /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); */
   border: 0.5px solid rgba(109, 109, 109, 0.25);
-  min-width: 300px;
-  flex-shrink: 0;
+  /* min-width: 300px; */
+  /* flex-shrink: 0; */
+  flex: 0 0 85%;
+  max-width: 320px;
   scroll-snap-align: start;
   overflow: hidden;
   transition: all 0.3s ease;

@@ -122,7 +122,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head />
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HighEnd Cars</title>
+      </head>
       <body>
         <ReduxProvider store={store}>
           <QueryClientProvider client={queryClient}>

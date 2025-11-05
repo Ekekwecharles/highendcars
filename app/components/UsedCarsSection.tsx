@@ -92,6 +92,10 @@ const StyledSlider = styled(Slider)`
   width: 88%;
   margin: 0 auto;
 
+  .slick-slide {
+    width: 100% !important;
+  }
+
   .slick-prev,
   .slick-next {
     z-index: 10;
