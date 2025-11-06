@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import Slider from "react-slick";
@@ -33,7 +33,7 @@ const CarCard = styled.div`
   overflow: hidden;
   transition: transform 0.3s ease;
   text-align: left;
-  margin: 0 0.5rem;
+  /* margin: 0 0.5rem; */
 
   &:hover {
     transform: translateY(-5px);
@@ -92,10 +92,6 @@ const StyledSlider = styled(Slider)`
   width: 88%;
   margin: 0 auto;
 
-  .slick-slide {
-    width: 100% !important;
-  }
-
   .slick-prev,
   .slick-next {
     z-index: 10;
@@ -132,9 +128,58 @@ const StyledSlider = styled(Slider)`
     opacity: 1;
   }
 
-  .slick-track {
-    display: flex;
+  /* .slick-track {
+    display: flex !important;
     align-items: stretch;
+    border: 1px solid red;
+    background-color: green;
+  }
+
+  .slick-slide {
+    display: flex;
+    border: 1px solid blue;
+    height: 100% !important;
+  }
+
+  .slick-slide > div {
+    display: flex;
+    height: 100% !important;
+  }
+
+  @media (max-width: 600px) {
+    .slick-slide {
+      width: 100% !important;
+    }
+  } */
+
+  /* ensure track and slides can stretch */
+  .slick-track {
+    display: flex !important;
+    align-items: stretch; /* critical: force children to stretch vertically */
+    gap: 0;
+    /* border: 1px solid red; */
+  }
+
+  /* slick-slide wrapper */
+  .slick-slide {
+    /* display: block !important; */
+    /* float: none !important; */
+    height: auto;
+    /* border: 1px solid blue; */
+  }
+
+  /* the actual wrapper that contains your CarCard (react-slick places your content here) */
+  .slick-slide > div {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    justify-content: stretch;
+    /* box-sizing: border-box; */
+    padding: 0 !important;
+    margin: 0 !important;
+    /* border: 1px solid yellow; */
   }
 
   & > div {
