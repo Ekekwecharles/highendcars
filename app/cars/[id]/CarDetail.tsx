@@ -192,7 +192,7 @@ export default function CarDetail({ carId }: { carId: string }) {
     if (!user) {
       const redirectUrl = `/auth/login?redirect=/cars/${carId}`;
       router.push(redirectUrl);
-      return;
+      return false;
     }
 
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -204,7 +204,7 @@ export default function CarDetail({ carId }: { carId: string }) {
     if (data.condition === "used" || data.is_promo === true) {
       if (existingIndex !== -1) {
         toast.error("This used car is already in your cart");
-        return;
+        return false;
       }
 
       const item = {
@@ -247,6 +247,7 @@ export default function CarDetail({ carId }: { carId: string }) {
     }
     localStorage.setItem("cart", JSON.stringify(cart));
     toast.success("Added to cart");
+    return true;
   }
 
   return (
@@ -328,8 +329,10 @@ export default function CarDetail({ carId }: { carId: string }) {
             {/* Optionally allow immediate checkout for single item - recommended to redirect to /cart */}
             <button
               onClick={() => {
-                handleAddToCart();
-                window.location.href = "/cart";
+                const added = handleAddToCart();
+                if (added) {
+                  router.push("/cart");
+                }
               }}
               style={{ marginLeft: 8 }}
             >
