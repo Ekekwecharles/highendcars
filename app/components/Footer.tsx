@@ -136,7 +136,7 @@ export default function Footer() {
         <Contact>
           <h3>Contact Us</h3>
           <p>Email: support@highendcars.com</p>
-          <p>Phone: +1 (310) 555-1212</p>
+          <p>Phone: +1 (234) 567-8910</p>
 
           <div className="socials">
             <a href="#" aria-label="Facebook">
