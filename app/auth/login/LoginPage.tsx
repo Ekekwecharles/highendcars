@@ -98,17 +98,18 @@ export default function LoginPage() {
 
     setLoading(true);
 
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        toast.success("Welcome back! 🚗💨");
-        router.push(redirect);
-        router.refresh();
-        listener.subscription.unsubscribe();
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === "SIGNED_IN" && session) {
+          toast.success("Welcome!!🚗💨");
+          router.push(redirect);
+          router.refresh();
+          listener.subscription.unsubscribe();
+        }
       }
-    });
+    );
 
     try {
-
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -118,8 +119,6 @@ export default function LoginPage() {
         toast.error(error.message);
         listener.subscription.unsubscribe();
       }
-
-
     } catch (error) {
       console.error("Unexpected error during login:", error);
       toast.error("An unexpected error occurred. Please try again.");

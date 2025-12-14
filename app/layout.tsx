@@ -54,7 +54,7 @@ function InnerApp({ children }: { children: React.ReactNode }) {
         //Fetch extra data from "users" table
         const { data: profile, error } = await supabase
           .from("users")
-          .select("nickname, is_admin")
+          .select("nickname, is_admin, full_name")
           .eq("id", user.id)
           .single();
 
@@ -69,6 +69,7 @@ function InnerApp({ children }: { children: React.ReactNode }) {
             email: user.email || "",
             nickname: profile?.nickname || null,
             is_admin: profile?.is_admin || false,
+            full_name: profile?.full_name || "",
           })
         );
       }
@@ -80,7 +81,7 @@ function InnerApp({ children }: { children: React.ReactNode }) {
         if (u) {
           const { data: profile, error } = await supabase
             .from("users")
-            .select("nickname, is_admin")
+            .select("nickname, is_admin, full_name")
             .eq("id", u.id)
             .single();
 
@@ -95,6 +96,7 @@ function InnerApp({ children }: { children: React.ReactNode }) {
               email: u.email || "",
               nickname: profile?.nickname || null,
               is_admin: profile?.is_admin || false,
+              full_name: profile?.full_name || "",
             })
           );
         } else dispatch(setUser(null));

@@ -5,6 +5,7 @@ type User = {
   email: string;
   nickname: string;
   is_admin: boolean;
+  full_name: string;
 } | null;
 const initialState: { user: User } = { user: null };
 

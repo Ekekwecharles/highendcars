@@ -56,7 +56,8 @@ export default function SignupPage() {
       } else {
         // Email confirmation required
         toast.success(
-          "Account created! Please check your email to confirm your account."
+          "Account created! Please check your email to confirm your account.",
+          { duration: 6000 }
         );
         router.push("/auth/login");
       }

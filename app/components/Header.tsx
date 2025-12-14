@@ -10,6 +10,169 @@ import { RootState } from "@/lib/store";
 import { supabase } from "@/lib/supabaseClient";
 import { setUser } from "@/store/slices/authSlice";
 
+type HeaderProps = {
+  dark: boolean;
+  setDark: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+// ==================== 🍀Main Component ====================
+export default function Header({ dark, setDark }: HeaderProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const emailName = user?.email ? user.email.split("@")[0] : "User";
+
+  //shorten long names
+  const shortenText = (text?: string, max = 7) => {
+    if (!text) return "";
+    return text.length > max ? `${text.slice(0, max)}...` : text;
+  };
+
+  const email = shortenText(emailName, 7);
+  const fullName = shortenText(user?.full_name, 10);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    dispatch(setUser(null));
+    setMenuOpen(false);
+  };
+
+  return (
+    <Wrapper>
+      <Link href="/" style={{ marginRight: "auto" }}>
+        <HeaderLogo />
+      </Link>
+
+      {/* Desktop Nav */}
+      <Nav>
+        <StyledLink href="/cars">Explore Cars</StyledLink>
+        <StyledLink href="/about">About Us</StyledLink>
+        <StyledLink href="#">Contact</StyledLink>
+
+        {user && (
+          <>
+            {user.is_admin ? (
+              <StyledLink href="/admin">Admin</StyledLink>
+            ) : (
+              <StyledLink href="#" className="profile-link">
+                <User size={16} />
+                {fullName || email || "User"}
+              </StyledLink>
+            )}
+
+            <button className="logout" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        )}
+        {!user && <StyledLink href="/auth/login">Login/Signup</StyledLink>}
+
+        <ThemeToggle onClick={() => setDark(!dark)}>
+          <AnimatePresence mode="wait" initial={false}>
+            {dark ? (
+              <motion.div
+                key="sun"
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Sun size={22} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="moon"
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Moon size={22} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </ThemeToggle>
+      </Nav>
+
+      {/* Hamburger for mobile */}
+      <Hamburger onClick={() => setMenuOpen((prev) => !prev)}>
+        {menuOpen ? <X size={24} /> : <Menu size={24} />}
+      </Hamburger>
+
+      <CartLink href="/cart">
+        <ShoppingCart size={24} />
+        <span>Cart</span>
+      </CartLink>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <MobileMenu
+            ref={menuRef}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Link href="/cars">Explore Cars</Link>
+            <Link href="/about">About Us</Link>
+            <Link href="#">Contact</Link>
+            {user && (
+              <>
+                {user.is_admin ? (
+                  <Link href="/admin">Admin</Link>
+                ) : (
+                  <Link
+                    href="#"
+                    className="profile-link"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "2px",
+                    }}
+                  >
+                    <User size={16} />
+                    {fullName || email || "User"}
+                  </Link>
+                )}
+
+                <button className="logout" onClick={handleLogout}>
+                  Logout
+                </button>
+              </>
+            )}
+            {!user && <Link href="/auth/login">Login</Link>}
+            <button className="theme-btn" onClick={() => setDark(!dark)}>
+              {dark ? "Light Mode" : "Dark Mode"}
+            </button>
+          </MobileMenu>
+        )}
+      </AnimatePresence>
+    </Wrapper>
+  );
+}
+
+//
+// ==================== 🌸STYLED COMPONENTS ====================
+//
+
 const Wrapper = styled.header`
   display: flex;
   align-items: center;
@@ -158,156 +321,3 @@ const MobileMenu = styled(motion.div)`
     }
   }
 `;
-
-type HeaderProps = {
-  dark: boolean;
-  setDark: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export default function Header({ dark, setDark }: HeaderProps) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement | null>(null);
-  const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.auth.user);
-  const emailName = user?.email ? user.email.split("@")[0] : "User";
-
-  //shorten long names
-  const displayName =
-    emailName.length > 7 ? `${emailName.slice(0, 7)}...` : emailName;
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-
-    if (menuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [menuOpen]);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    dispatch(setUser(null));
-    setMenuOpen(false);
-  };
-
-  return (
-    <Wrapper>
-      <Link href="/" style={{ marginRight: "auto" }}>
-        <HeaderLogo />
-      </Link>
-
-      {/* Desktop Nav */}
-      <Nav>
-        <StyledLink href="/cars">Explore Cars</StyledLink>
-        <StyledLink href="/about">About Us</StyledLink>
-        <StyledLink href="#">Contact</StyledLink>
-
-        {user && (
-          <>
-            {user.is_admin ? (
-              <StyledLink href="/admin">Admin</StyledLink>
-            ) : (
-              <StyledLink href="#" className="profile-link">
-                <User size={16} />
-                {user.nickname || displayName || "User"}
-              </StyledLink>
-            )}
-
-            <button className="logout" onClick={handleLogout}>
-              Logout
-            </button>
-          </>
-        )}
-        {!user && <StyledLink href="/auth/login">Login</StyledLink>}
-
-        <ThemeToggle onClick={() => setDark(!dark)}>
-          <AnimatePresence mode="wait" initial={false}>
-            {dark ? (
-              <motion.div
-                key="sun"
-                initial={{ opacity: 0, rotate: -90 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                exit={{ opacity: 0, rotate: 90 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Sun size={22} />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="moon"
-                initial={{ opacity: 0, rotate: -90 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                exit={{ opacity: 0, rotate: 90 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Moon size={22} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </ThemeToggle>
-      </Nav>
-
-      {/* Hamburger for mobile */}
-      <Hamburger onClick={() => setMenuOpen((prev) => !prev)}>
-        {menuOpen ? <X size={24} /> : <Menu size={24} />}
-      </Hamburger>
-
-      <CartLink href="/cart">
-        <ShoppingCart size={24} />
-        <span>Cart</span>
-      </CartLink>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <MobileMenu
-            ref={menuRef}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Link href="/cars">Explore Cars</Link>
-            <Link href="/about">About Us</Link>
-            <Link href="#">Contact</Link>
-            {user && (
-              <>
-                {user.is_admin ? (
-                  <Link href="/admin">Admin</Link>
-                ) : (
-                  <Link
-                    href="#"
-                    className="profile-link"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "2px",
-                    }}
-                  >
-                    <User size={16} />
-                    {user.nickname || displayName || "User"}
-                  </Link>
-                )}
-
-                <button className="logout" onClick={handleLogout}>
-                  Logout
-                </button>
-              </>
-            )}
-            {!user && <Link href="/auth/login">Login</Link>}
-            <button className="theme-btn" onClick={() => setDark(!dark)}>
-              {dark ? "Light Mode" : "Dark Mode"}
-            </button>
-          </MobileMenu>
-        )}
-      </AnimatePresence>
-    </Wrapper>
-  );
-}

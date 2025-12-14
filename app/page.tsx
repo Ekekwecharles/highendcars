@@ -1,24 +1,3 @@
-// "use client";
-// import React from "react";
-// import HeroSection from "@/components/Hero";
-// import ChatSupport from "./components/ChatSupport";
-
-// export default function Home() {
-//   return (
-//     <>
-//       <HeroSection />
-
-//       <section style={{ padding: 24 }}>
-//         <h2>Featured Listings</h2>
-//         <p>Hot deals, new arrivals, and promotions appear here.</p>
-//         <ChatSupport />
-//       </section>
-//     </>
-//   );
-// }
-
-// ----------------------------------------------------------------------
-
 "use client";
 import React from "react";
 import HeroSection from "@/components/Hero";
