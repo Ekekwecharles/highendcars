@@ -14,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Footer from "./components/Footer";
+import StyledComponentsRegistry from "@/lib/registry";
 
 function InnerApp({ children }: { children: React.ReactNode }) {
   const [dark, setDark] = useState(true);
@@ -129,23 +130,25 @@ export default function RootLayout({
         <title>HighEnd Cars</title>
       </head>
       <body>
-        <ReduxProvider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <InnerApp>{children}</InnerApp>
-          </QueryClientProvider>
-        </ReduxProvider>
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            style: {
-              borderRadius: "10px",
-              background: "#333",
-              color: "#fff",
-              padding: "0.75rem, 1rem",
-              fontSize: "0.9rem",
-            },
-          }}
-        />
+        <StyledComponentsRegistry>
+          <ReduxProvider store={store}>
+            <QueryClientProvider client={queryClient}>
+              <InnerApp>{children}</InnerApp>
+            </QueryClientProvider>
+          </ReduxProvider>
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+                padding: "0.75rem, 1rem",
+                fontSize: "0.9rem",
+              },
+            }}
+          />
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
